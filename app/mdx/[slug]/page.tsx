@@ -3,6 +3,7 @@ import path from "path";
 import React from "react";
 import dynamic from "next/dynamic";
 import type { Metadata, ResolvingMetadata } from "next";
+import Link from "next/link";
 
 type Props = {
   params: { slug: string };
@@ -56,8 +57,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   return (
     <div className="p-24">
+      <div className="pb-10">
+        <Link href="/">{`<- Home`}</Link>
+      </div>
       <article className="prose prose-lg md:prose-lg lg:prose-lg mx-auto">
-        <div className="pb-4">
+        <div className="pb-8">
           <h1 className="text-6xl font-black">{post.metadata.title}</h1>
           <p>
             Published on:{" "}
