@@ -14,8 +14,8 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const post = await getPost(params);
   return {
-    title: post.slug,
-    description: post.slug,
+    title: post.metadata.title,
+    description: post.metadata.title,
   };
 }
 
@@ -26,9 +26,11 @@ async function getPost({ slug }: { slug: string }) {
       throw new Error(`MDX file for slug ${slug} does not exist`);
     }
 
+    const { metadata } = await import(`@/mdx/${slug}.mdx`);
+
     return {
       slug,
-      mdxPath,
+      metadata,
     };
   } catch (error) {
     console.error("Error fetching post:", error);
@@ -45,15 +47,23 @@ export async function generateStaticParams() {
   return params;
 }
 
-export default function Page({ params }: { params: { slug: string } }) {
+export default async function Page({ params }: { params: { slug: string } }) {
   const { slug } = params;
 
+  const post = await getPost(params);
   // Dynamically import the MDX file based on the slug
   const MDXContent = dynamic(() => import(`@/mdx/${slug}.mdx`));
 
   return (
     <div className="p-24">
       <article className="prose prose-lg md:prose-lg lg:prose-lg mx-auto">
+        <div className="pb-4">
+          <h1 className="text-6xl font-black">{post.metadata.title}</h1>
+          <p>
+            Published on:{" "}
+            {new Date(post.metadata.publishDate).toLocaleDateString()}
+          </p>
+        </div>
         <MDXContent />
       </article>
     </div>
