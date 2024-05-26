@@ -52,8 +52,10 @@ export default function Page({ params }: { params: { slug: string } }) {
   const MDXContent = dynamic(() => import(`@/mdx/${slug}.mdx`));
 
   return (
-    <article className="prose prose-lg md:prose-lg lg:prose-lg mx-auto">
-      <MDXContent />
-    </article>
+    <div className="p-24">
+      <article className="prose prose-lg md:prose-lg lg:prose-lg mx-auto">
+        <MDXContent />
+      </article>
+    </div>
   );
 }
