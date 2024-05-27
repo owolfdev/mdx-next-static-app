@@ -57,17 +57,17 @@ export default async function Home() {
         <h2 className="text-4xl font-bold mb-8">MDX Posts</h2>
         <ul className="space-y-4">
           {posts.map((post) => (
-            <li key={post.slug} className="p-4 border rounded-md shadow">
-              <Link
-                className="text-2xl font-bold hover:underline"
-                href={`/mdx/${post.slug}`}
-              >
-                {post.metadata.title}
+            <li key={post.slug} className="p-4 border rounded-md shadow ">
+              <Link className="" href={`/mdx/${post.slug}`}>
+                <p className="text-2xl font-bold hover:underline">
+                  {post.metadata.title}
+                </p>
+
+                <p className="text-gray-500">
+                  Published on:{" "}
+                  {new Date(post.metadata.publishDate).toLocaleDateString()}
+                </p>
               </Link>
-              <p className="text-gray-500">
-                Published on:{" "}
-                {new Date(post.metadata.publishDate).toLocaleDateString()}
-              </p>
             </li>
           ))}
         </ul>
