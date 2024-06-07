@@ -15,8 +15,8 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const post = await getPost(params);
   return {
-    title: post.metadata.title,
-    description: post.metadata.title,
+    title: post.metadata.title || "Untitled Post",
+    description: post.metadata.title || "No description",
   };
 }
 
@@ -56,7 +56,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const MDXContent = dynamic(() => import(`@/mdx/${slug}.mdx`));
 
   return (
-    <div className="flex min-h-screen flex-col items-center  gap-12 sm:gap-24 p-6 sm:p-24  ">
+    <div className="flex min-h-screen flex-col items-center gap-12 sm:gap-24 p-6 sm:p-24  ">
       <div className="pb-10">
         <Link href="/">{`<- Home`}</Link>
       </div>

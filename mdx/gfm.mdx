@@ -1,0 +1,38 @@
+import InteractiveCheckbox from "@/components/mdx/interactive-checkbox.tsx";
+
+export const metadata = {
+  title: "Github flavored Markdown",
+  publishDate: "2024-05-05",
+};
+
+# GFM
+
+## Autolink literals
+
+www.example.com, https://example.com, and contact@example.com.
+
+## ~Strikethrough~
+
+~one~ or ~~two~~ tildes.
+
+## Table
+
+| apple | baby | candy | dress |
+| ----- | :--- | ----: | :---: |
+| 123   | 123  |   123 |  123  |
+
+## Tasklist
+
+- [ ] to do
+- [x] done
+
+<InteractiveCheckbox checked={false}>to do</InteractiveCheckbox>
+<InteractiveCheckbox checked={true}>done</InteractiveCheckbox>
+
+---
+
+## Footnote
+
+A note[^1]
+
+[^1]: Big note.
