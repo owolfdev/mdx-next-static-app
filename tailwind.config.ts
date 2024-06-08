@@ -3,6 +3,9 @@ import type { Config } from "tailwindcss";
 const config: Config = {
   content: ["./(app|components)/**/*.{ts,tsx,mdx}", "./mdx-components.tsx"],
   theme: {
+    hljs: {
+      theme: "atom-one-dark",
+    },
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
@@ -11,6 +14,11 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-highlightjs")],
+  safelist: [
+    {
+      pattern: /hljs+/,
+    },
+  ],
 };
 export default config;

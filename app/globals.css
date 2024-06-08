@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+pre {
+  overflow-x: auto;
+  padding: 1rem 0;
+  /* Adjust the value as needed */
+}
+
+pre [data-line] {
+  padding: 0 1rem;
+}
+
+code {
+  border-radius: 8px;
+}
