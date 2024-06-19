@@ -1,13 +1,23 @@
 import React from "react";
 import type { MDXComponents } from "mdx/types";
-import YouTube from "@/components/mdx/youtube"; // Adjust the import path as needed
-import Code from "@/components/mdx/code"; // Adjust the import path as needed
+import YouTube from "@/components/mdx/youtube";
+import Code from "@/components/mdx/code";
+import InlineCode from "@/components/mdx/inline-code";
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...components,
-    YouTube, // Add the custom YouTube component
-    code: Code, // Add the custom Code component
+    YouTube,
+    code: InlineCode, // For inline code
+    pre: (props) => <div {...props} />, // Pass pre to div to ensure it wraps the code block
+    code: (props) => {
+      const { className, children } = props;
+      if (className) {
+        return <Code {...props} />;
+      } else {
+        return <InlineCode>{children}</InlineCode>;
+      }
+    },
     h1: (props) => <h1 className="text-4xl font-black pb-2" {...props} />,
     h2: (props) => <h2 className="text-3xl font-bold pb-2" {...props} />,
     h3: (props) => <h3 className="text-2xl font-semibold pb-2" {...props} />,
