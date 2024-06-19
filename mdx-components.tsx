@@ -3,13 +3,13 @@ import type { MDXComponents } from "mdx/types";
 import YouTube from "@/components/mdx/youtube";
 import Code from "@/components/mdx/code";
 import InlineCode from "@/components/mdx/inline-code";
+import Pre from "@/components/mdx/pre"; // Adjust the import path as needed
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...components,
     YouTube,
-    code: InlineCode, // For inline code
-    pre: (props) => <div {...props} />, // Pass pre to div to ensure it wraps the code block
+    pre: Pre, // Use the custom Pre component
     code: (props) => {
       const { className, children } = props;
       if (className) {

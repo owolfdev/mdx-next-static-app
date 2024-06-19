@@ -7,7 +7,7 @@ interface InlineCodeProps {
 
 const InlineCode: React.FC<InlineCodeProps> = ({ children }) => {
   return (
-    <code className="inline-code bg-gray-200 text-gray-900 px-1 rounded">
+    <code className="inline-code bg-gray-200 text-gray-900 px-2 py-1 rounded">
       {children}
     </code>
   );
