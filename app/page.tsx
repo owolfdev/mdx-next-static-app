@@ -40,7 +40,7 @@ export default async function Home() {
   const posts = await getAllPosts();
 
   return (
-    <main className="flex min-h-screen flex-col items-center  gap-12 sm:gap-24 p-6 sm:p-24">
+    <main className="flex min-h-screen flex-col items-center gap-12 p-6">
       <div>Next MDX Configure Static Blog</div>
       <div className="sm:w-3/4">
         As of Next JS 14 we can configure our apps to support MDX using the

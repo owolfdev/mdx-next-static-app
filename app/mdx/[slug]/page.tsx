@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import React from "react";
 import dynamic from "next/dynamic";
 import type { Metadata, ResolvingMetadata } from "next";
@@ -56,20 +56,22 @@ export default async function Page({ params }: { params: { slug: string } }) {
   const MDXContent = dynamic(() => import(`@/mdx/${slug}.mdx`));
 
   return (
-    <div className="flex min-h-screen flex-col items-center gap-12 sm:gap-24 p-6 sm:p-24  ">
-      <div className="pb-10">
-        <Link href="/">{`<- Home`}</Link>
-      </div>
-      <article className="">
+    <div className="flex flex-col min-h-screen gap-12 sm:gap-24 pt-12">
+      <div className="w-full min-max-width-XL flex-shrink-0 mx-auto">
         <div className="pb-8">
-          <h1 className="text-6xl font-black">{post.metadata.title}</h1>
-          <p>
-            Published on:{" "}
-            {new Date(post.metadata.publishDate).toLocaleDateString()}
-          </p>
+          <Link href="/">{"<- Home"}</Link>
         </div>
-        <MDXContent />
-      </article>
+        <article>
+          <div className="pb-8">
+            <h1 className="text-6xl font-black">{post.metadata.title}</h1>
+            <p>
+              Published on:{" "}
+              {new Date(post.metadata.publishDate).toLocaleDateString()}
+            </p>
+          </div>
+          <MDXContent />
+        </article>
+      </div>
     </div>
   );
 }

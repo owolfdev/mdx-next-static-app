@@ -23,7 +23,7 @@ const Code = (props: any) => {
   };
 
   return (
-    <div className="code-block text-sm gap-0 rounded-lg text-white max-w-2xl">
+    <div className="code-block text-sm gap-0 rounded-lg text-white ">
       <div className="flex justify-between items-center bg-gray-900 py-2 px-4 rounded-t-lg">
         <span className="text-gray-300">{language}</span>
         <button className="text-gray-300 hover:text-white" onClick={handleCopy}>

@@ -19,3 +19,36 @@ code {
 .code-block {
   margin-bottom: 1.5em;
 }
+
+.min-max-width-XL {
+  min-width: 50rem; /* 800px */
+  max-width: 50rem;
+}
+
+@media (max-width: 1024px) {
+  .min-max-width-XL {
+    min-width: 45rem; /* 720px */
+    max-width: 45rem;
+  }
+}
+
+@media (max-width: 820px) {
+  .min-max-width-XL {
+    min-width: 40rem; /* 640px */
+    max-width: 40rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .min-max-width-XL {
+    min-width: 30rem; /* Full width */
+    max-width: 30rem; /* Full width */
+  }
+}
+
+@media (max-width: 400px) {
+  .min-max-width-XL {
+    min-width: 20rem; /* Close to full width but with some padding */
+    max-width: 20rem;
+  }
+}

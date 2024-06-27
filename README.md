@@ -365,4 +365,4 @@ Navigate to `http://localhost:3000` to see your landing page with a list of MDX 
 
 ---
 
-By following these steps, you can set up a Next.js 14 project that generates static pages from MDX documents, styled with Tailwind CSS, and enhanced with custom MDX components. Happy coding!
+By following these steps, you can set up a Next.js 14 project that generates static pages from MDX documents, styled with Tailwind CSS, and enhanced with custom MDX components.
