@@ -1,6 +1,9 @@
+import LikeButton from "../components/like-button";
+
 export const metadata = {
   title: "Code Example Page",
   publishDate: "2024-03-01T00:00:00Z",
+  id: 1,
 };
 
 # Example Code
@@ -23,3 +26,5 @@ console.log(hello);
 hello = "Hello, World!"
 print(hello)
 ```
+
+<LikeButton postId={metadata.id} />

@@ -1,8 +1,10 @@
+import LikeButton from "../components/like-button";
 import NameForm from "../components/name-form";
 
 export const metadata = {
   title: "Import Component Page",
   publishDate: "2024-03-01T00:00:00Z",
+  id: 3,
 };
 
 ## Import Component
@@ -70,3 +72,5 @@ This is an example of importing a component into an MDX file.
 
 <NameForm />
 ```
+
+<LikeButton postId={metadata.id} />

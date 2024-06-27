@@ -1,8 +1,10 @@
+import LikeButton from "../components/like-button";
 import InteractiveCheckbox from "@/components/mdx/interactive-checkbox.tsx";
 
 export const metadata = {
   title: "Github flavored Markdown",
   publishDate: "2024-05-05",
+  id: 2,
 };
 
 # GFM
@@ -36,3 +38,5 @@ www.example.com, https://example.com, and contact@example.com.
 A note[^1]
 
 [^1]: Big note.
+
+<LikeButton postId={metadata.id} />
