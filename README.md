@@ -1,3 +1,5 @@
+Welcome
+
 Here’s a step-by-step guide to creating a Next.js 14 app that generates static MDX pages from documents stored in a local directory. This article dives into the essentials of using MDX with Next.js, starting with the installation of necessary packages like `@next/mdx`. It covers configuration steps to make your Next.js application recognize and properly handle .md and .mdx files.
 
 Find the code for this project on [GitHub](https://github.com/owolfdev/mdx-next-static-app)
