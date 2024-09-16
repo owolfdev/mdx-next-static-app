@@ -101,3 +101,23 @@ export async function removeAllLikes() {
     return { success: false, error: (error as Error).message };
   }
 }
+
+export async function isPostLikedByUser(postId: number, userId: string) {
+  console.log("isPostLikedByUser", postId, userId);
+  try {
+    const result = await sql`
+      SELECT 1 FROM likes_for_test
+      WHERE postid = ${postId} AND userid = ${userId}
+      LIMIT 1;
+    `;
+
+    if (result.rows && result.rows.length > 0) {
+      return { success: true, liked: true }; // If a row is returned, the post is liked.
+    }
+
+    return { success: true, liked: false }; // If no row is returned, the post is not liked.
+  } catch (error) {
+    console.error("Error in isPostLikedByUser:", (error as Error).message);
+    return { success: false, error: (error as Error).message, liked: false };
+  }
+}

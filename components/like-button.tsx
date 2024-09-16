@@ -3,16 +3,14 @@ import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 import {
-  createTable,
-  removeTable,
+  countLikes,
   addLike,
   removeLike,
-  removeAllLikes,
-  countLikes,
+  isPostLikedByUser,
 } from "@/app/actions/like-actions";
 
 interface LikeButtonProps {
-  postId: number;
+  postId: number; // postId is a number
 }
 
 function LikeButton({ postId }: LikeButtonProps) {
@@ -20,114 +18,82 @@ function LikeButton({ postId }: LikeButtonProps) {
   const [userId, setUserId] = useState<string | null>(null);
   const [totalLikes, setTotalLikes] = useState<number>(0);
   const [loading, setLoading] = useState(true);
+  const [likeActionInProgress, setLikeActionInProgress] = useState(false);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    // Check for an existing user ID in local storage or create a new one
-    let storedUserId = localStorage.getItem("userId");
-    if (!storedUserId) {
-      storedUserId = uuidv4();
-      localStorage.setItem("userId", storedUserId);
-    }
-    setUserId(storedUserId);
+    const fetchUserId = () => {
+      let storedUserId = localStorage.getItem("userIdForMDXBlog");
+      if (!storedUserId) {
+        storedUserId = uuidv4(); // Create a new UUID for testing or fallback purposes
+        localStorage.setItem("userIdForMDXBlog", storedUserId);
+      }
+      setUserId(storedUserId);
+    };
 
-    // Check if the post is already liked
-    const likedPosts = JSON.parse(localStorage.getItem("likedPosts") || "{}");
-    if (likedPosts[postId]) {
-      setLiked(true);
-    }
-
-    // Fetch total likes
+    fetchUserId();
     fetchTotalLikes();
-
-    // Set loading to false after data is loaded
-    setLoading(false);
   }, [postId]);
 
+  useEffect(() => {
+    if (userId) {
+      checkIfLikedByUser();
+    }
+  }, [userId]);
+
   async function fetchTotalLikes() {
-    console.log("Fetching total likes for post", postId);
-    const response = await countLikes(postId);
-    if (response.success && typeof response.count === "number") {
-      setTotalLikes(response.count);
-      console.log("Total likes fetched successfully:", response.count);
-    } else {
-      console.error("Failed to fetch total likes:", response.error);
-      setTotalLikes(0); // default to 0 if there's an error or count is not a number
+    try {
+      const response = await countLikes(postId);
+      if (response.success && typeof response.count === "number") {
+        setTotalLikes(response.count);
+      } else {
+        setTotalLikes(0); // Default to 0 if there's an error
+      }
+    } catch (error) {
+      console.error("Failed to fetch likes:", error);
+      setTotalLikes(0); // Default to 0 in case of failure
+    } finally {
+      setLoading(false); // Data has been loaded (even if with an error)
+    }
+  }
+
+  async function checkIfLikedByUser() {
+    try {
+      const response = await isPostLikedByUser(postId, userId as string);
+      if (response.success) {
+        setLiked(response.liked); // Set liked status based on the database
+      }
+    } catch (error) {
+      console.error("Failed to check if post is liked by user:", error);
     }
   }
 
   async function handleLikeAction() {
-    if (userId) {
-      console.log("Liking post", postId, "with user ID", userId);
+    if (userId && !likeActionInProgress) {
+      setLikeActionInProgress(true); // Start the like action
       const response = await addLike(postId, userId);
       if (response.success) {
-        const likedPosts = JSON.parse(
-          localStorage.getItem("likedPosts") || "{}"
-        );
-        likedPosts[postId] = true;
-        localStorage.setItem("likedPosts", JSON.stringify(likedPosts));
         setLiked(true);
-        setTotalLikes((prev) => prev + 1);
-        console.log("Like added successfully");
-      } else {
-        console.error("Failed to add like:", response.error);
+        setTotalLikes((prev) => prev + 1); // Increment the total likes
       }
+      setLikeActionInProgress(false); // End the like action
     }
   }
 
   async function handleUnlikeAction() {
-    if (userId) {
-      console.log("Unliking post", postId, "with user ID", userId);
+    if (userId && !likeActionInProgress) {
+      setLikeActionInProgress(true); // Start the unlike action
       const response = await removeLike(postId, userId);
       if (response.success) {
-        const likedPosts = JSON.parse(
-          localStorage.getItem("likedPosts") || "{}"
-        );
-        delete likedPosts[postId];
-        localStorage.setItem("likedPosts", JSON.stringify(likedPosts));
         setLiked(false);
-        setTotalLikes((prev) => prev - 1);
-        console.log("Like removed successfully");
-      } else {
-        console.error("Failed to remove like:", response.error);
+        setTotalLikes((prev) => prev - 1); // Decrement the total likes
       }
-    }
-  }
-
-  async function handleRemoveAllLikes() {
-    console.log("Removing all likes");
-    const response = await removeAllLikes();
-    if (response.success) {
-      localStorage.setItem("likedPosts", "{}");
-      setLiked(false);
-      setTotalLikes(0);
-      console.log("All likes removed successfully");
-    } else {
-      console.error("Failed to remove all likes:", response.error);
-    }
-  }
-
-  async function handleCreateTable() {
-    console.log("Creating table");
-    const response = await createTable();
-    if (response.success) {
-      console.log("Table created successfully");
-    } else {
-      console.error("Failed to create table:", response.error);
-    }
-  }
-
-  async function handleRemoveTable() {
-    console.log("Removing table");
-    const response = await removeTable();
-    if (response.success) {
-      console.log("Table removed successfully");
-    } else {
-      console.error("Failed to remove table:", response.error);
+      setLikeActionInProgress(false); // End the unlike action
     }
   }
 
   if (loading) {
-    return null; // or you can return a loading spinner
+    return null; // Hide component while loading
   }
 
   return (
@@ -138,45 +104,18 @@ function LikeButton({ postId }: LikeButtonProps) {
         onClick={() => {
           liked ? handleUnlikeAction() : handleLikeAction();
         }}
-        className={
-          "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center"
-        }
+        className={`like-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center ${
+          liked ? "liked" : "unliked"
+        }`}
+        disabled={likeActionInProgress} // Disable button while action is in progress
       >
         {liked ? (
           <AiFillLike className="text-xl" />
         ) : (
           <AiOutlineLike className="text-xl" />
         )}
+        {liked ? "Liked" : "Like"}
       </button>
-      <div className="hidden">
-        <button
-          type="button"
-          onClick={handleCreateTable}
-          className={
-            "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mt-2"
-          }
-        >
-          Create Table
-        </button>
-        <button
-          type="button"
-          onClick={handleRemoveTable}
-          className={
-            "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2"
-          }
-        >
-          Remove Table
-        </button>
-        <button
-          type="button"
-          onClick={handleRemoveAllLikes}
-          className={
-            "bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mt-2"
-          }
-        >
-          Remove All Likes
-        </button>
-      </div>
     </div>
   );
 }
